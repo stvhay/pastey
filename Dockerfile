@@ -8,5 +8,5 @@ RUN pip install -U pip setuptools wheel
 RUN pip install -r /app/requirements.txt
 COPY . /app/
 WORKDIR /app
-ENTRYPOINT ["sh", "-c", "gunicorn -w $PASTEY_WORKERS -t $PASTEY_THREADS -b :$PASTEY_LISTEN_PORT app:app"]
+ENTRYPOINT ["sh", "-c", "gunicorn -w $PASTEY_WORKERS -t $PASTEY_THREADS -b :$PASTEY_LISTEN_PORT --worker-class=gthread app:app"]
 EXPOSE $PASTEY_LISTEN_PORT
