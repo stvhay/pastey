@@ -4,6 +4,7 @@ ENV PASTEY_THREADS=4
 ENV PASTEY_LISTEN_PORT=5000
 RUN pip install gunicorn
 COPY requirements.txt /app/
+RUN pip install -U pip setuptools wheel
 RUN pip install -r /app/requirements.txt
 COPY . /app/
 WORKDIR /app
