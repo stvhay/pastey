@@ -1,6 +1,11 @@
 FROM tensorflow/tensorflow:2.5.0
-COPY . /app/
+ENV PASTEY_WORKERS=2
+ENV PASTEY_THREADS=4
+ENV PASTEY_LISTEN_PORT=5000
+RUN pip install gunicorn
+COPY requirements.txt /app/
 RUN pip install -r /app/requirements.txt
-EXPOSE 5000
+COPY . /app/
 WORKDIR /app
-ENTRYPOINT ["python3","app.py"]
+ENTRYPOINT ["sh", "-c", "gunicorn -w $PASTEY_WORKERS -t $PASTEY_THREADS -b :$PASTEY_LISTEN_PORT app:app"]
+EXPOSE $PASTEY_LISTEN_PORT
