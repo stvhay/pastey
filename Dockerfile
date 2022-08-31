@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:2.5.0
+FROM tensorflow/tensorflow:2.9.1
 ENV PASTEY_WORKERS=2
 ENV PASTEY_THREADS=4
 ENV PASTEY_LISTEN_PORT=5000
