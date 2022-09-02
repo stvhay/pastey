@@ -67,21 +67,24 @@ def config_page():
 
 # View paste page
 @app.route("/view/<unique_id>")
+@app.route("/v/<unique_id>")
 def view(unique_id):
     paste = functions.get_paste(unique_id)
 
     if paste is not None:
         return render_template("view.html",
             paste=paste,
-            url=common.build_url(request, "/view/" + unique_id),
+            url=common.build_url(request, "/v/" + unique_id),
             whitelisted=common.verify_whitelist(common.get_source_ip(request)),
             active_theme=common.set_theme(request),
             themes=loaded_themes)
     else:
         abort(404)
-        
+
 # View paste page (raw)
 @app.route("/view/<unique_id>/raw")
+@app.route("/view/<unique_id>/r")
+@app.route("/v/<unique_id>/r")
 def view_raw(unique_id):
     paste = functions.get_paste(unique_id)
 
@@ -94,6 +97,7 @@ def view_raw(unique_id):
 
 # Delete paste
 @app.route("/delete/<unique_id>")
+@app.route("/d/<unique_id>")
 def delete(unique_id):
     if not common.verify_whitelist(common.get_source_ip(request)):
         abort(401)
@@ -146,14 +150,14 @@ def paste():
 
             # Return link if cli form option was set
             if 'cli' in request.form:
-                return common.build_url(request, "/view/" + unique_id + "#" + quote(key)), 200
+                return common.build_url(request, "/v/" + unique_id + "#" + quote(key)), 200
             else:
-                return redirect("/view/" + unique_id + "#" + quote(key))
+                return redirect("/v/" + unique_id + "#" + quote(key))
         else:
             if 'cli' in request.form:
-                return common.build_url(request, "/view/" + unique_id), 200
+                return common.build_url(request, "/v/" + unique_id), 200
             else:
-                return redirect("/view/" + unique_id)
+                return redirect("/v/" + unique_id)
 
 # POST new raw paste
 @app.route('/raw', methods = ['POST'])
@@ -167,7 +171,7 @@ def paste_raw():
 
     # Create paste
     unique_id, key = functions.new_paste("Untitled", request.data.decode('utf-8'), source_ip, single=False, encrypt=False)
-    link = common.build_url(request, "/view/" + unique_id)
+    link = common.build_url(request, "/v/" + unique_id)
 
     return link, 200
 
@@ -209,17 +213,17 @@ def paste_json():
     unique_id, key = functions.new_paste(title, content, source_ip, expires=expiration, single=single, encrypt=encrypt, language=language)
     if encrypt:
         if from_client:
-          return common.build_url(request, "/view/" + unique_id + "#" + quote(key)), 200
+          return common.build_url(request, "/v/" + unique_id + "#" + quote(key)), 200
         else:
           return {
-              "link": common.build_url(request, "/view/" + unique_id + "#" + quote(key))
+              "link": common.build_url(request, "/v/" + unique_id + "#" + quote(key))
           }, 200
     else:
         if from_client:
-          return common.build_url(request, "/view/" + unique_id), 200
+          return common.build_url(request, "/v/" + unique_id), 200
         else:
           return {
-              "link": common.build_url(request, "/view/" + unique_id)
+              "link": common.build_url(request, "/v/" + unique_id)
           }, 200
 
 # Custom 404 handler

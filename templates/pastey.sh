@@ -153,7 +153,7 @@ elif [ "$file" ]; then		# input from a file
 		die 'Could not read from file "$file"'
 	fi
 else	# read from stdin
-	content_fd=0
+	exec {content_fd}< /dev/fd/0
 fi
 
 
@@ -175,3 +175,5 @@ curl \
 	${encrypt} \
 	${single} \
 	${PASTEY_ENDPOINT}
+echo
+
