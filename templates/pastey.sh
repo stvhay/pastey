@@ -177,3 +177,4 @@ curl \
 	${PASTEY_ENDPOINT}
 echo
 
+exec {content_fd}<&-
