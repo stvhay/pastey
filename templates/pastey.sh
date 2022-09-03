@@ -29,7 +29,6 @@ show_help() {
 	content is read from stdin.
 
 	EOF
-  exit
 }
 
 die() {
@@ -46,7 +45,6 @@ title=
 single=
 encrypt=
 execute=
-content=
 
 while :; do
 	case $1 in
@@ -111,7 +109,7 @@ while :; do
 			shift
 			execute=("$@")
 			if [ ! "$title" ]; then
-				title=${execute[@]}
+				title=${execute[*]}
 			fi
 			break
 			;;
@@ -131,7 +129,7 @@ if [ "$expiration" ] && [ "$single" ]; then
     die 'option -x|--expiration and -s|--single are mutually exclusive'
 fi
 
-if [ "$execute" ] && [ "$file" ]; then
+if [ "${execute[*]}" ] && [ "$file" ]; then
     die "-f|--file and -- <command> are mutually exclusive"
 fi
 
@@ -150,7 +148,7 @@ elif [ "$file" ]; then		# input from a file
 	if [ -r "$file" ]; then
 		exec {content_fd}< "$file"
 	else
-		die 'Could not read from file "$file"'
+		die "Could not read from file \"$file\""
 	fi
 else	# read from stdin
 	exec {content_fd}< /dev/fd/0
@@ -178,3 +176,4 @@ curl \
 echo
 
 exec {content_fd}<&-
+
