@@ -16,7 +16,7 @@ def verify_whitelist(ip):
 
     # Check blacklist
     for network in config.blacklist_cidr:
-        if address in ipaddress.IPv4Network(network):
+        if address in ipaddress.ip_network(network):
             return False
 
     if not config.use_whitelist:
@@ -24,7 +24,7 @@ def verify_whitelist(ip):
 
     # Check whitelist
     for network in config.whitelist_cidr:
-        if address in ipaddress.IPv4Network(network):
+        if address in ipaddress.ip_network(network):
             return True
     
     return False
